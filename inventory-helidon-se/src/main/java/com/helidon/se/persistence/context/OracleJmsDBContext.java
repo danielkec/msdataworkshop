@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
+import javax.jms.DeliveryMode;
+import oracle.jms.AQjmsConstants;
 import javax.jms.JMSException;
 import javax.jms.MessageConsumer;
 import javax.jms.Queue;
@@ -89,7 +91,7 @@ public class OracleJmsDBContext extends DBContext {
         jmsMessage.setJMSCorrelationID("" + 2);
         jmsMessage.setJMSPriority(2);
         // </stub for msdataworkshop>
-        publisher.publish(jmsMessage);
+        publisher.publish(topic, jmsMessage, DeliveryMode.PERSISTENT,2, AQjmsConstants.EXPIRATION_NEVER);
         session.commit();
         String id = jmsMessage.getJMSMessageID();
         log.debug("Sent to {} message {}, id {}", queueName, message, id);
